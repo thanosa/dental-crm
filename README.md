@@ -1,8 +1,8 @@
 # Dental CRM
-Simple excel CRM solution for dentists
+Excel CRM solution for dentists.
 
 ## Description
-A Simple excel CRM solution that I have build for a friend of mine who is a dentist. 
+A simple excel CRM solution that I have build for a friend of mine who is a dentist. 
 
 The purpose this solution it is to keep track of the static patient's information as well as information about each appointment. The static data for each patient is mainly the medical and dental history and secondary the contact details. For each appointment, the dentist have the ability to enter the complaint, treatment plan, notes and financials. Finally, the reports gives a quick overview of the 
 
@@ -20,16 +20,16 @@ The purpose this solution it is to keep track of the static patient's informatio
 </ul>
 
 ### Patients
-<img src="./images/01.png" width="200">
+<img src="./images/01.png" width="800">
 
 ### Appointments
-<img src="./images/02.png" width="200">
+<img src="./images/02.png" width="800">
 
 ### Monthly report
-<img src="./images/03.png" width="200">
+<img src="./images/03.png" width="800">
 
 ### Accounts report
-<img src="./images/04.png" width="200">
+<img src="./images/04.png" width="800">
 
 ## Contribute
 Pull requests, bug reports, and feature requests are welcome.
