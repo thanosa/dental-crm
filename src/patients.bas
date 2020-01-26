@@ -1,4 +1,3 @@
-
 Private Const wsName = "Patients"
 
 Private Sub searchPatient()
@@ -95,12 +94,6 @@ Private Sub selectSearch()
 
 End Sub
 
-Private Sub scrollToTop()
-    
-    ActiveWindow.ScrollRow = 1
-    
-End Sub
-
 Private Sub unfilter()
 
     Dim ws As Worksheet
@@ -114,9 +107,21 @@ End Sub
 
 Private Sub protectSheet()
 
-    Protect DrawingObjects:=True, Contents:=True, Scenarios:=True, _
+    Protect drawingObjects:=True, Contents:=True, Scenarios:=True, _
     AllowFiltering:=True, AllowDeletingRows:=True, AllowFormattingRows:=True, _
     AllowFormattingColumns:=True, AllowFormattingCells:=True
+    
+End Sub
+
+Private Sub Worksheet_Activate()
+
+    Call performancePre
+    Call unprotectAllWs
+    
+    Call refreshPivotTableData
+    
+    Call protectAllWs(True)
+    Call performancePost
     
 End Sub
 

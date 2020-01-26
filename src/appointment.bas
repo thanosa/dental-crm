@@ -25,19 +25,6 @@ Private Sub searchAppointment()
     
 End Sub
 
-Private Sub clearSearch()
-
-    Unprotect
-    
-    Dim ws As Worksheet
-    Set ws = Worksheets(wsName)
-    
-    Range("AppointmentsCriteria").Value = ""
-    
-    Call protectSheet
-
-End Sub
-
 Private Sub addAppointment()
     
     ' Layout dependent
@@ -45,8 +32,11 @@ Private Sub addAppointment()
     maxRow = 1000000000
     idColumn = "A"
     selectColumn = "D"
-    clearFieldsFromColumn = "D"
-    clearFieldsToColumn = "L"
+    clearFieldsFromColumn1 = "F"
+    clearFieldsToColumn1 = "K"
+    clearFieldsFromColumn2 = "M"
+    clearFieldsToColumn2 = "N"
+    
     currentDateColumn = "C"
     
     Dim ws As Worksheet
@@ -85,7 +75,7 @@ Private Sub addAppointment()
     
     Call unfilter
     
-    ' Copys the last record to the first empty rowc to maintain the formating and data validations
+    ' Copys the last record to the first empty row to maintain the formating and data validations
     Range(copyRow & ":" & copyRow).Copy
     Range(emptyRow & ":" & emptyRow).Select
     ws.Paste
@@ -95,7 +85,8 @@ Private Sub addAppointment()
     Range(idColumn & emptyRow).Value = searchPatientId
     
     ' Clear new entry fields
-    Range(clearFieldsFromColumn & emptyRow & ":" & clearFieldsToColumn & emptyRow).ClearContents
+    Range(clearFieldsFromColumn1 & emptyRow & ":" & clearFieldsToColumn1 & emptyRow).ClearContents
+    Range(clearFieldsFromColumn2 & emptyRow & ":" & clearFieldsToColumn2 & emptyRow).ClearContents
     
     ' Enter the current date
     Range(currentDateColumn & emptyRow).Value = Date
@@ -105,8 +96,6 @@ Private Sub addAppointment()
     
     ' Select the first field to enter
     Range(selectColumn & emptyRow).Select
-    
-    Call protectSheet
         
     
 End Sub
@@ -115,12 +104,6 @@ Private Sub selectSearch()
 
     Range("AppointmentsCriteria").Select
 
-End Sub
-
-Private Sub scrollToTop()
-    
-    ActiveWindow.ScrollRow = 1
-    
 End Sub
 
 Private Sub unfilter()
@@ -134,31 +117,62 @@ Private Sub unfilter()
 
 End Sub
 
+Private Sub clearSearch()
+
+    Unprotect
+    
+    Dim ws As Worksheet
+    Set ws = Worksheets(wsName)
+    
+    Range("AppointmentsCriteria").Value = ""
+    
+    Call protectSheet
+
+End Sub
+
 Private Sub protectSheet()
 
-    Protect DrawingObjects:=True, Contents:=True, Scenarios:=True, _
+    Protect drawingObjects:=True, Contents:=True, Scenarios:=True, _
     AllowFiltering:=True, AllowDeletingRows:=True, AllowFormattingRows:=True, _
     AllowFormattingColumns:=True, AllowFormattingCells:=True
     
 End Sub
 
+Private Sub Worksheet_Activate()
+
+    Call performancePre
+    Call unprotectAllWs
+    
+    Call refreshPivotTableData
+    
+    Call protectAllWs(True)
+    Call performancePost
+    
+End Sub
+
 Private Sub SearchButton_Click()
 
+    Call performancePre
     Call searchAppointment
     Call selectSearch
-
+    Call performancePost
+    
 End Sub
 
 Private Sub ClearButton_Click()
 
+    Call performancePre
     Call clearSearch
     Call searchAppointment
     Call selectSearch
-
+    Call performancePost
+    
 End Sub
 
 Private Sub AddAppointmentButton_Click()
 
+    Call performancePre
     Call addAppointment
-
+    Call performancePost
+    
 End Sub

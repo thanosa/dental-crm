@@ -1,39 +1,120 @@
+Private Sub sortPivotTable1(sortOrder As XlSortOrder, sortField As String, pivotLines As Integer)
+    
+    ' Worksheet dependent
+    ptName = "PivotTable1"
+    ptBaseField = "Name"
+    
+    ActiveSheet.PivotTables(ptName).PivotFields(ptBaseField).AutoSort sortOrder _
+        , sortField, ActiveSheet.PivotTables(ptName).PivotColumnAxis. _
+        pivotLines(pivotLines), 1
+    
+    Call scrollToTop
+
+End Sub
+
+Private Sub Worksheet_Activate()
+
+    Call performancePre
+    Call unprotectAllWs
+    
+    Call refreshPivotTableData
+    
+    Call protectAllWs(True)
+    Call performancePost
+    
+End Sub
+
+Private Sub EditTimelineButton_Click()
+
+    Call performancePre
+    
+    Call protectAllWs(False)
+    
+    Call performancePost
+    
+End Sub
+
+Private Sub LockTimelineButton_Click()
+
+    Call performancePre
+    
+    Call protectAllWs(True)
+    
+    Call performancePost
+    
+End Sub
+
 Private Sub SortByPatientIdButton_Click()
+    
+    Call performancePre
+    Call unprotectAllWs
+    
+    Call sortPivotTable1(xlAscending, "ID", 1)
+    
+    Call protectAllWs(True)
+    Call performancePost
+    
+End Sub
 
-    ActiveSheet.PivotTables("PivotTable1").PivotFields("Name").AutoSort xlAscending _
-        , "Patient  ID", ActiveSheet.PivotTables("PivotTable1").PivotColumnAxis. _
-        PivotLines(1), 1
+Private Sub SortByBalanceNegativeButton_Click()
+
+    Call performancePre
+    Call unprotectAllWs
+    
+    Call sortPivotTable1(xlAscending, "Balance.", 2)
+    
+    Call protectAllWs(True)
+    Call performancePost
 
 End Sub
 
-Private Sub SortByAppointmentsButton_Click()
+Private Sub SortByBalancePositiveButton_Click()
 
-    ActiveSheet.PivotTables("PivotTable1").PivotFields("Name").AutoSort _
-        xlDescending, "Appointments", ActiveSheet.PivotTables("PivotTable1"). _
-        PivotColumnAxis.PivotLines(2), 1
-
-End Sub
-
-Private Sub SortByBalanceButton_Click()
-
-    ActiveSheet.PivotTables("PivotTable1").PivotFields("Name").AutoSort _
-        xlDescending, "Sum of Balance", ActiveSheet.PivotTables("PivotTable1"). _
-        PivotColumnAxis.PivotLines(3), 1
-
+    Call performancePre
+    Call unprotectAllWs
+    
+    Call sortPivotTable1(xlDescending, "Balance.", 2)
+    
+    Call protectAllWs(True)
+    Call performancePost
+    
 End Sub
 
 Private Sub SortByCostButton_Click()
 
-    ActiveSheet.PivotTables("PivotTable1").PivotFields("Name").AutoSort _
-        xlDescending, "Sum of Cost", ActiveSheet.PivotTables("PivotTable1"). _
-        PivotColumnAxis.PivotLines(4), 1
-
+    Call performancePre
+    Call unprotectAllWs
+    
+    Call sortPivotTable1(xlDescending, "Cost.", 3)
+    
+    Call protectAllWs(True)
+    Call performancePost
+    
 End Sub
 
 Private Sub SortByReceiptButton_Click()
-
-    ActiveSheet.PivotTables("PivotTable1").PivotFields("Name").AutoSort _
-        xlDescending, "Sum of Receipt", ActiveSheet.PivotTables("PivotTable1"). _
-        PivotColumnAxis.PivotLines(5), 1
-
+    
+    Call performancePre
+    Call unprotectAllWs
+    
+    Call sortPivotTable1(xlDescending, "Receipts.", 4)
+    
+    Call protectAllWs(True)
+    Call performancePost
+    
 End Sub
+
+Private Sub SortByAppointmentsButton_Click()
+
+    Call performancePre
+    Call unprotectAllWs
+    
+    Call sortPivotTable1(xlDescending, "Appointments", 5)
+    
+    Call protectAllWs(True)
+    Call performancePost
+    
+End Sub
+
+
+
