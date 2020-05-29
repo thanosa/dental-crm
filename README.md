@@ -1,22 +1,17 @@
-# Dental CRM
-Excel CRM solution for dentists.
+# Dental HCRM
+Healthcare CRM solution for dentists in excel
 
 ## Description
-A simple excel CRM solution that I have build for a friend of mine who is a dentist. 
+A Heathcare CRM solution on excel for destists.
 
-The purpose this solution it is to keep track of the static patient's information as well as information about each appointment. The static data for each patient is mainly the medical and dental history and secondary the contact details. For each appointment, the dentist have the ability to enter the complaint, treatment plan, notes and financials. Finally, the reports gives a quick overview of the 
+The solution helps the dentist to keep track of the dental patient's healthcare information. The patient's profile data is primarily the medical and dental history and secondarily the contact details. The HCRM is used before, during and after each appointment keeping track of the complaint, treatment plan, operations done and financials. Finally, the solution provides reports about the financials.
 
 ## Features
 <ul>
-<li>Supports up to a million appointment records (excel rows limit).</li>
+<li>Supports up to 1 million appointment records (excel rows limit).</li>
+<li>The patients can be searched by their name or id</li>
 <li>Adding new patients and appointment is simple.</li>
-<li>The patients can be found via their name or their id using the same search box.</li>
-<li>The financial metrics are reflecting the filtered-in records.</li>
-<li>By removing the filters, it shows the total revenue and total receipts.</li>
-<li>Filtering for a particular patient, it shows the revenue and total receipts for that patient.</li>
-<li>The monthly report graphs the financials in which the revenue is displayed against the appointments count.</li>
-<li>The accounts report can be sorted in multiple ways with the relevant buttons.</li>
-<li>The solution can be easily expanded as per the number of the supported fields.</li>
+<li>The financial reports show the revenue and the receipts per patient or per month against th appointments count and support multiple ways to sort by.</li>
 </ul>
 
 ### Patients
