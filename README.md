@@ -1,8 +1,7 @@
 # Dental HCRM
-Healthcare CRM solution for dentists in excel
 
 ## Description
-A Heathcare CRM solution on excel for destists.
+A Heathcare CRM solution on excel for destists in excel
 
 The solution helps the dentist to keep track of the dental patient's healthcare information. The patient's profile data is primarily the medical and dental history and secondarily the contact details. The HCRM is used before, during and after each appointment keeping track of the complaint, treatment plan, operations done and financials. Finally, the solution provides reports about the financials.
 
