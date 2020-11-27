@@ -1,23 +1,40 @@
-Private Const wsName = "Patients"
+' Layout dependent
+Private Const headerRow = 6
+Private Const maxRow = 10000000
+Private Const idColumn = "A"
+Private Const idColumnIdx = 1
+Private Const selectColumn = "B"
+Private Const selectColumnIdx = 2
+Private Const practiceColumn = "D"
+Private Const practiceColumnIdx = 4
+
+Private Const clearFieldsFromColumn = "B"
+Private Const clearFieldsToColumn = "L"
+    
 
 Private Sub searchPatient()
 
     Unprotect
     
     Dim ws As Worksheet
-    Set ws = Worksheets(wsName)
-    
-    criteriaEntry = ws.Range("PatientsCriteria").Value
+    Set ws = Worksheets(patientsWsName)
     
     Call unfilter
     
-    If criteriaEntry <> "" Then
-        If IsNumeric(criteriaEntry) Then
-            criteria = "=" & criteriaEntry
-            ws.Range("PatientsRecords").AutoFilter Field:=1, Criteria1:=criteria, Operator:=xlAnd
+    practiceCriteriaEntry = ws.Range("PatientsPractice").Value
+    If practiceCriteriaEntry <> "" Then
+        practiceCriteria = "=" & practiceCriteriaEntry
+        ws.Range("PatientsRecords").AutoFilter Field:=practiceColumnIdx, Criteria1:=practiceCriteria, Operator:=xlAnd
+    End If
+    
+    patientCriteriaEntry = ws.Range("PatientsCriteria").Value
+    If patientCriteriaEntry <> "" Then
+        If IsNumeric(patientCriteriaEntry) Then
+            patientCriteria = "=" & patientCriteriaEntry
+            ws.Range("PatientsRecords").AutoFilter Field:=idColumnIdx, Criteria1:=patientCriteria, Operator:=xlAnd
         Else
-            criteria = "=*" & criteriaEntry & "*"
-            ws.Range("PatientsRecords").AutoFilter Field:=2, Criteria1:=criteria, Operator:=xlAnd
+            patientCriteria = "=*" & patientCriteriaEntry & "*"
+            ws.Range("PatientsRecords").AutoFilter Field:=selectColumnIdx, Criteria1:=patientCriteria, Operator:=xlAnd
         End If
     End If
     
@@ -32,7 +49,7 @@ Private Sub clearSearch()
     Unprotect
     
     Dim ws As Worksheet
-    Set ws = Worksheets(wsName)
+    Set ws = Worksheets(patientsWsName)
     
     Range("PatientsCriteria").ClearContents
     
@@ -42,16 +59,8 @@ End Sub
 
 Private Sub addPatient()
     
-    ' Layout dependent
-    headerRow = 6
-    maxRow = 10000000
-    idColumn = "A"
-    selectColumn = "B"
-    clearFieldsFromColumn = "B"
-    clearFieldsToColumn = "K"
-    
     Dim ws As Worksheet
-    Set ws = Worksheets(wsName)
+    Set ws = Worksheets(patientsWsName)
     
     Unprotect
     
@@ -80,6 +89,12 @@ Private Sub addPatient()
     ' Clear fields
     Range(clearFieldsFromColumn & emptyRow & ":" & clearFieldsToColumn & emptyRow).ClearContents
     
+    ' Set the branch
+    branchName = ws.Range("PatientsPractice").Value
+    If branchName <> "" Then
+        Range(practiceColumn & emptyRow).Value = branchName
+    End If
+    
     ' Select the next field
     Range(selectColumn & emptyRow).Select
     
@@ -97,7 +112,7 @@ End Sub
 Private Sub unfilter()
 
     Dim ws As Worksheet
-    Set ws = Worksheets(wsName)
+    Set ws = Worksheets(patientsWsName)
     
     On Error Resume Next
         ws.showAllData
@@ -144,5 +159,18 @@ Private Sub AddPatientButton_Click()
 
     Call clearSearch
     Call addPatient
+    Call searchPatient
     
 End Sub
+
+Private Sub Worksheet_Change(ByVal Target As Range)
+
+    If Target.Address = Range("PatientsPractice").Address Then
+        Call clearSearch
+        Call searchPatient
+        Call selectSearch
+    End If
+    
+End Sub
+
+

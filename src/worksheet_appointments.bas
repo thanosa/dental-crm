@@ -1,22 +1,40 @@
+' Layout dependent
+Private Const headerRow = 7
+Private Const maxRow = 1000000000
+Private Const patientIdColumn = "A"
+Private Const patientIdColumnIdx = 1
+Private Const branchIdColumn = "C"
+Private Const branchIdColumnIdx = "3"
+Private Const dateColumn = "D"
+Private Const complaintColumn = "G"
+Private Const transactionNotesColumn = "L"
+Private Const costColumn = "N"
+Private Const receiptColumn = "O"
 
-Private Const wsName = "Appointments"
 
 Private Sub searchAppointment()
 
     Unprotect
     
     Dim ws As Worksheet
-    Set ws = ActiveWorkbook.Worksheets(wsName)
+    Set ws = ActiveWorkbook.Worksheets(appointmentsWsName)
     
-    criteriaEntry = ws.Range("AppointmentsCriteria").Value
+    Dim patientsWs As Worksheet
+    Set patientsWs = ActiveWorkbook.Worksheets(patientsWsName)
+    
+    patientIdEntry = ws.Range("AppointmentsCriteria").Value
     
     Call unfilter
     
-    If criteriaEntry = "" Then
-        Call unfilter
-    Else
-        criteria = "=" & ws.Range("AppointmentsCriteria")
-        ws.Range("AppointmentsRecords").AutoFilter Field:=1, Criteria1:=criteria, Operator:=xlAnd
+    branch = patientsWs.Range("PatientsPractice")
+    If branch <> "" Then
+        branchCriteria = "=" & branch
+        ws.Range("AppointmentsRecords").AutoFilter Field:=branchIdColumnIdx, Criteria1:=branchCriteria, Operator:=xlAnd
+    End If
+    
+    If patientIdEntry <> "" Then
+        patientIdCriteria = "=" & patientIdEntry
+        ws.Range("AppointmentsRecords").AutoFilter Field:=patientIdColumnIdx, Criteria1:=patientIdCriteria, Operator:=xlAnd
     End If
     
     Call scrollToTop
@@ -27,20 +45,8 @@ End Sub
 
 Private Sub addAppointment()
     
-    ' Layout dependent
-    headerRow = 6
-    maxRow = 1000000000
-    idColumn = "A"
-    selectColumn = "D"
-    clearFieldsFromColumn1 = "F"
-    clearFieldsToColumn1 = "K"
-    clearFieldsFromColumn2 = "M"
-    clearFieldsToColumn2 = "N"
-    
-    currentDateColumn = "C"
-    
     Dim ws As Worksheet
-    Set ws = Worksheets(wsName)
+    Set ws = Worksheets(appointmentsWsName)
     
     Unprotect
     
@@ -54,7 +60,8 @@ Private Sub addAppointment()
     End If
     
     ' Asks the user if they are sure about creating the new appointment for that patient
-    response = MsgBox("Add appointment for patient with ID:  " & searchPatientId & " ?", vbQuestion + vbYesNo, "New appointment")
+    searchPatientName = Range("AppointmentsPatientName").Value
+    response = MsgBox("Add appointment for: " & searchPatientId & " " & searchPatientName & " ?", vbQuestion + vbYesNo, "New appointment")
     If response = vbNo Then
         protectSheet
         Exit Sub
@@ -65,7 +72,7 @@ Private Sub addAppointment()
     copyRow = -1
     
     For currentRow = headerRow To maxRow
-        currentId = Range(idColumn & currentRow).Value
+        currentId = Range(patientIdColumn & currentRow).Value
         If currentId = "" Then
             emptyRow = currentRow
             copyRow = emptyRow - 1
@@ -81,20 +88,26 @@ Private Sub addAppointment()
     ws.Paste
     Application.CutCopyMode = False
     
-    ' Put next id
-    Range(idColumn & emptyRow).Value = searchPatientId
+    ' Fills the patient id
+    Range(patientIdColumn & emptyRow).Value = searchPatientId
     
     ' Clear new entry fields
+    clearFieldsFromColumn1 = complaintColumn
+    clearFieldsToColumn1 = transactionNotesColumn
+    clearFieldsFromColumn2 = costColumn
+    clearFieldsToColumn2 = receiptColumn
+    
     Range(clearFieldsFromColumn1 & emptyRow & ":" & clearFieldsToColumn1 & emptyRow).ClearContents
     Range(clearFieldsFromColumn2 & emptyRow & ":" & clearFieldsToColumn2 & emptyRow).ClearContents
     
     ' Enter the current date
-    Range(currentDateColumn & emptyRow).Value = Date
+    Range(dateColumn & emptyRow).Value = Date
     
     ' Filter the records
     Call searchAppointment
     
     ' Select the first field to enter
+    selectColumn = dateColumn
     Range(selectColumn & emptyRow).Select
         
     
@@ -109,7 +122,7 @@ End Sub
 Private Sub unfilter()
     
     Dim ws As Worksheet
-    Set ws = Worksheets(wsName)
+    Set ws = Worksheets(appointmentsWsName)
     
     On Error Resume Next
         ws.showAllData
@@ -122,7 +135,7 @@ Private Sub clearSearch()
     Unprotect
     
     Dim ws As Worksheet
-    Set ws = Worksheets(wsName)
+    Set ws = Worksheets(appointmentsWsName)
     
     Range("AppointmentsCriteria").Value = ""
     
@@ -144,6 +157,8 @@ Private Sub Worksheet_Activate()
     Call unprotectAllWs
     
     Call refreshPivotTableData
+    Call searchAppointment
+    Call selectSearch
     
     Call protectAllWs(True)
     Call performancePost
