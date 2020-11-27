@@ -61,7 +61,7 @@ Private Sub addAppointment()
     
     ' Asks the user if they are sure about creating the new appointment for that patient
     searchPatientName = Range("AppointmentsPatientName").Value
-    response = MsgBox("Add appointment for: " & searchPatientId & " " & searchPatientName & " ?", vbQuestion + vbYesNo, "New appointment")
+    response = MsgBox("Add appointment for: " & searchPatientId & " ?", vbQuestion + vbYesNo, "New appointment")
     If response = vbNo Then
         protectSheet
         Exit Sub
