@@ -44,6 +44,27 @@ Private Sub searchPatient()
 
 End Sub
 
+
+Private Sub filterPractice()
+
+    Unprotect
+    
+    Dim ws As Worksheet
+    Set ws = Worksheets(patientsWsName)
+    
+    Call unfilter
+    
+    practiceCriteriaEntry = ws.Range("PatientsPractice").Value
+    If practiceCriteriaEntry <> "" Then
+        practiceCriteria = "=" & practiceCriteriaEntry
+        ws.Range("PatientsRecords").AutoFilter Field:=practiceColumnIdx, Criteria1:=practiceCriteria, Operator:=xlAnd
+    End If
+    
+    Call protectSheet
+
+End Sub
+
+
 Private Sub clearSearch()
 
     Unprotect
@@ -61,6 +82,13 @@ Private Sub addPatient()
     
     Dim ws As Worksheet
     Set ws = Worksheets(patientsWsName)
+    
+    ' Check that the practice has been selected
+    If ws.Range("PatientsPractice").Value = "" Then
+        Call MsgBox("Please fill Practice before adding a patient")
+        ws.Range("PatientsPractice").Select
+        Exit Sub
+    End If
     
     Unprotect
     
@@ -159,7 +187,7 @@ Private Sub AddPatientButton_Click()
 
     Call clearSearch
     Call addPatient
-    Call searchPatient
+    Call filterPractice
     
 End Sub
 
@@ -167,10 +195,13 @@ Private Sub Worksheet_Change(ByVal Target As Range)
 
     If Target.Address = Range("PatientsPractice").Address Then
         Call clearSearch
-        Call searchPatient
-        Call selectSearch
+        Call filterPractice
     End If
     
 End Sub
+
+
+
+
 
 
