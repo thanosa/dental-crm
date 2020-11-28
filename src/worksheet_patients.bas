@@ -196,9 +196,14 @@ Private Sub Worksheet_Change(ByVal Target As Range)
     If Target.Address = Range("PatientsPractice").Address Then
         Call clearSearch
         Call filterPractice
+        practiceUpdated = True
+    Else
+        practiceUpdated = False
     End If
     
 End Sub
+
+
 
 
 

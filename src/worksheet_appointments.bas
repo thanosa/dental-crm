@@ -184,6 +184,11 @@ Private Sub Worksheet_Activate()
     Call performancePre
     Call unprotectAllWs
     
+    If practiceUpdated = True Then
+        Call clearSearch
+        practiceUpdated = False
+    End If
+    
     Call refreshPivotTableData
     Call filterPractice
     Call selectSearch
@@ -219,5 +224,7 @@ Private Sub AddAppointmentButton_Click()
     Call performancePost
     
 End Sub
+
+
 
 
