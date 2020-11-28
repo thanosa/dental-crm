@@ -43,6 +43,34 @@ Private Sub searchAppointment()
     
 End Sub
 
+
+Private Sub filterPractice()
+
+    Unprotect
+    
+    Dim ws As Worksheet
+    Set ws = ActiveWorkbook.Worksheets(appointmentsWsName)
+    
+    Dim patientsWs As Worksheet
+    Set patientsWs = ActiveWorkbook.Worksheets(patientsWsName)
+    
+    patientIdEntry = ws.Range("AppointmentsCriteria").Value
+    
+    Call unfilter
+    
+    branch = patientsWs.Range("PatientsPractice")
+    If branch <> "" Then
+        branchCriteria = "=" & branch
+        ws.Range("AppointmentsRecords").AutoFilter Field:=branchIdColumnIdx, Criteria1:=branchCriteria, Operator:=xlAnd
+    End If
+    
+    Call scrollToTop
+    
+    Call protectSheet
+    
+End Sub
+
+
 Private Sub addAppointment()
     
     Dim ws As Worksheet
@@ -157,7 +185,7 @@ Private Sub Worksheet_Activate()
     Call unprotectAllWs
     
     Call refreshPivotTableData
-    Call searchAppointment
+    Call filterPractice
     Call selectSearch
     
     Call protectAllWs(True)
@@ -191,3 +219,5 @@ Private Sub AddAppointmentButton_Click()
     Call performancePost
     
 End Sub
+
+
